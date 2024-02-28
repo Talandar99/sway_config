@@ -1,3 +1,5 @@
+font pango:FiraCode Nerd Font Mono 12
+
 set $mod Mod4
 
 set $left h
@@ -171,7 +173,7 @@ client.urgent            	#2f343a #FFC777 #1E2030 #FFC777  #FFC777
 client.placeholder       	#000000 #0c0c0c #1E2030 #565f89  #565f89
 
 for_window [class="^.*"] border pixel 3
-#hide_edge_borders both
+hide_edge_borders smart
 smart_gaps on
 gaps outer 15px
 gaps inner 15px

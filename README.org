@@ -2,6 +2,7 @@
 #+property: header-args :tangle config
 This is The Sway
 https://swaywm.org/
+
 Dependancies:
 - sway
 - waybar
@@ -17,6 +18,10 @@ tangle this file with
 
 Read ~man 5 sway~ for a complete reference.
 * Variables
+** Font
+#+begin_src conf
+font pango:FiraCode Nerd Font Mono 12
+#+end_src
 ** Set Super Key as modifier
 #+begin_src conf
 set $mod Mod4
@@ -267,7 +272,7 @@ client.placeholder       	#000000 #0c0c0c #1E2030 #565f89  #565f89
 * Window options
 #+begin_src conf
 for_window [class="^.*"] border pixel 3
-#hide_edge_borders both
+hide_edge_borders smart
 smart_gaps on
 gaps outer 15px
 gaps inner 15px
