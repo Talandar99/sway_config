@@ -2,42 +2,47 @@
 #+property: header-args :tangle config
 This is The Sway
 https://swaywm.org/
+Dependancies:
+- sway
+- waybar
+- swaybg
+- rofi-lbonn-wayland
+- grim
+- swayshot
+- swappy
+- wl-clipboard
 
 tangle this file with
 ~org-babel-tangle~
 
 Read ~man 5 sway~ for a complete reference.
 * Variables
-#+begin_src bash
-# Logo key. Use Mod1 for Alt.
+** Set Super Key as modifier
+#+begin_src conf
 set $mod Mod4
-# Home row direction keys, like vim
+#+end_src
+** Set Home row direction keys, like vim
+#+begin_src conf
 set $left h
 set $down j
 set $up k
 set $right l
-# Your preferred terminal emulator
-set $term foot
 #+end_src
-Your preferred application launcher
-Note: pass the final command to swaymsg so that the resulting window can be opened
-on the original workspace that the command was run on.
-#+begin_src bash
-set $menu dmenu_path | wmenu | xargs swaymsg exec --
+** keyboard input
+#+begin_src conf
+input "keyboard" {
+    xkb_options compose:menu
+}
 #+end_src
-* Output configuration
-Example configuration:
-output HDMI-A-1 resolution 1920x1080 position 1920,0
-You can get the names of your outputs by running: ~swaymsg -t get_outputs~
-#+begin_src bash
-output * bg @datadir@/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+* Wallpaper
+#+begin_src conf
+output "*" bg ~/.config/sway/wallpaper.jpg fill
 #+end_src
-Default wallpaper (more resolutions are available in @datadir@/backgrounds/sway/)
 
 * Idle configuration
 Example configuration:
 
-#+begin_src bash
+#+begin_src conf
 #exec swayidle -w \
 #timeout 300 'swaylock -f -c 000000' \
 #timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
@@ -51,7 +56,7 @@ resumed. It will also lock your screen before your computer goes to sleep.
 * Input configuration
 Example configuration:
 
-#+begin_src bash
+#+begin_src conf
 #input "2:14:SynPS/2_Synaptics_TouchPad" {
 #dwt enabled
 #tap enabled
@@ -64,23 +69,27 @@ You can get the names of your inputs by running: ~swaymsg -t get_inputs~
 Read ~man 5 sway-input~ for more information about this section.
 
 * Key bindings
+** Start application
+#+begin_src conf
+bindsym $mod+p exec rofi -config ~/.config/sway/rofi.css -show combi
+# terminal
+bindsym $mod+Return exec alacritty
+# browser
+bindsym $mod+Shift+w exec firefox
+# screenshots
+bindsym $mod+Shift+s exec grim -g "$(slurp)" - | wl-copy
+
+#+end_src
 ** Basics:
-#+begin_src bash
-# Start a terminal
-bindsym $mod+Return exec $term
-
+#+begin_src conf
 # Kill focused window
-bindsym $mod+Shift+q kill
-
-# Start your launcher
-bindsym $mod+d exec $menu
-
+bindsym $mod+q kill
 #+end_src
 Drag floating windows by holding down $mod and left mouse button.
 Resize them with right mouse button + $mod.
 Despite the name, also works for non-floating windows.
 Change normal to inverse to use left mouse button for resizing and right
-#+begin_src bash
+#+begin_src conf
 # mouse button for dragging.
 floating_modifier $mod normal
 
@@ -93,7 +102,7 @@ bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. 
 ** Moving around:
 Start a terminal
 Move your focus around
-#+begin_src bash
+#+begin_src conf
 bindsym $mod+$left focus left
 bindsym $mod+$down focus down
 bindsym $mod+$up focus up
@@ -116,8 +125,31 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 #+end_src
 ** Workspaces:
-#+begin_src bash
-# Switch to workspace
+*** Assign applications to proper workspace #TODO FIX
+#+begin_src conf
+#for_window [class="firefox"] move to workspace $ws2
+#for_window [class="Spotify"] move to workspace $ws3
+#for_window [class="Steam"] move to workspace $ws4
+#for_window [class="steam"] move to workspace $ws4
+#for_window [class="Gimp"] move to workspace $ws8
+#for_window [class="Signal"] move to workspace $ws10
+#for_window [class="discord"] move to workspace $ws10
+#+end_src
+*** Rename workspaces #TODO FIX
+#+begin_src conf
+#set $ws1 "1: Terminal  "
+#set $ws2 "2: Firefox  "
+#set $ws3 "3: Spotify  "
+#set $ws4 "4: Games  "
+#set $ws5 "5: General  "
+#set $ws6 "6: General  "
+#set $ws7 "7: General  "
+#set $ws8 "8: Gimp  "
+#set $ws9 "9: Commander  "
+#set $ws10 "10: Comms  "
+#+end_src
+*** Switch to workspace
+#+begin_src conf
 bindsym $mod+1 workspace number 1
 bindsym $mod+2 workspace number 2
 bindsym $mod+3 workspace number 3
@@ -128,7 +160,9 @@ bindsym $mod+7 workspace number 7
 bindsym $mod+8 workspace number 8
 bindsym $mod+9 workspace number 9
 bindsym $mod+0 workspace number 10
-# Move focused container to workspace
+#+end_src
+*** Move focused container to workspace
+#+begin_src conf
 bindsym $mod+Shift+1 move container to workspace number 1
 bindsym $mod+Shift+2 move container to workspace number 2
 bindsym $mod+Shift+3 move container to workspace number 3
@@ -140,30 +174,29 @@ bindsym $mod+Shift+8 move container to workspace number 8
 bindsym $mod+Shift+9 move container to workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10
 #+end_src
-Note: workspaces can have any name you want, not just numbers.
-We just use 1-10 as the default.
 
 ** Layout stuff:
 You can "split" the current object of your focus with
 $mod+b or $mod+v, for horizontal and vertical splits
 respectively.
-#+begin_src bash
-bindsym $mod+b splith
-bindsym $mod+v splitv
+#+begin_src conf
+bindsym $mod+s splitv; exec notify-send "sway" "Changed split mode: Horizontal"
+bindsym $mod+v splith; exec notify-send "sway" "Changed split mode: Vertical"
 
 # Switch the current container between different layout styles
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+#bindsym $mod+s layout stacking
+#bindsym $mod+w layout tabbed
+#bindsym $mod+e layout toggle split
 
 # Make the current focus fullscreen
 bindsym $mod+f fullscreen
 
+# TODO
 # Toggle the current focus between tiling and floating mode
-bindsym $mod+Shift+space floating toggle
-
+bindsym $mod+m floating toggle
+# TODO
 # Swap focus between the tiling area and the floating area
-bindsym $mod+space focus mode_toggle
+bindsym $mod+Shift+m focus mode_toggle
 
 # Move focus to the parent container
 bindsym $mod+a focus parent
@@ -171,19 +204,20 @@ bindsym $mod+a focus parent
 ** Scratchpad:
 Sway has a "scratchpad", which is a bag of holding for windows.
 You can send windows there and get them back later.
-#+begin_src bash
+#+begin_src conf
+#TODO figure out how to use it
 # Move the currently focused window to the scratchpad
-bindsym $mod+Shift+minus move scratchpad
+#bindsym $mod+Shift+minus move scratchpad
 # Show the next scratchpad window or hide the focused scratchpad window.
 # If there are multiple scratchpad windows, this command cycles through them.
-bindsym $mod+minus scratchpad show
+#bindsym $mod+minus scratchpad show
 #+end_src
 ** Resizing containers:
 left will shrink the containers width
 right will grow the containers width
 up will shrink the containers height
 down will grow the containers height
-#+begin_src bash
+#+begin_src conf
 #
 mode "resize" {
     bindsym $left resize shrink width 10px
@@ -203,20 +237,59 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 #+end_src
+** Volume
+#+begin_src conf
+set $refresh_i3status killall -SIGUSR1 i3status
+
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+
+bindsym $mod+period exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
+bindsym $mod+comma exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
+#+end_src
+
+#+RESULTS:
+
+** Use Mouse+$mod to drag floating windows to their wanted position
+#+begin_src conf
+floating_modifier $mod
+#+end_src
+* Colors
+#+begin_src conf
+client.focused           	#82AAFF #1E2030 #FFC777 #7aa2f7  #7aa2f7
+client.focused_inactive  	#82AAFF #1E2030 #82AAFF #565f89  #565f89
+client.unfocused         	#565f89 #1E2030 #82AAFF #565f89  #565f89
+client.urgent            	#2f343a #FFC777 #1E2030 #FFC777  #FFC777
+client.placeholder       	#000000 #0c0c0c #1E2030 #565f89  #565f89
+#+end_src
+* Window options
+#+begin_src conf
+for_window [class="^.*"] border pixel 3
+#hide_edge_borders both
+smart_gaps on
+gaps outer 15px
+gaps inner 15px
+#+end_src
+
 * Status Bar:
 Read ~man 5 sway-bar~ for more information about this section.
-#+begin_src bash
+#+begin_src conf
 bar {
     position top
 
     # When the status_command prints a new line to stdout, swaybar updates.
     # The default just shows the current date and time.
-    status_command while date +'%Y-%m-%d %X'; do sleep 1; done
-
+    status_command while date +'%Y-%m-%d %H:%M'; do sleep 1; done
     colors {
-        statusline #ffffff
-        background #323232
-        inactive_workspace #32323200 #32323200 #5c5c5c
+		background #1E2030
+		statusline #82AAFF
+		separator #565f89
+		focused_workspace #82AAFF #1E2030 #FFC777
+		active_workspace #333333 #333333 #888888
+		inactive_workspace #565f89 #1E2030 #82AAFF
+		urgent_workspace #FFC777 #1E2030 #FFC777
     }
 }
 #+end_src
