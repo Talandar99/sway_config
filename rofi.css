@@ -8,7 +8,7 @@ configuration {
 
 @theme "/dev/null"
 
-* {
+*{
     bg: #1E2030;
     bg-alt: #1E2030;
     bg-selected: #82AAFF;
@@ -17,7 +17,7 @@ configuration {
     border-colour: #FFC777;
     silver: #565f89;
 
-  
+
   border: 0;
   margin: 0;
   padding: 0;
@@ -30,7 +30,7 @@ window {
   location:north;
   children:                    [ horibox ];
 }
-/*****----- Horizontal Box -----*****/
+
 horibox {
     spacing:                     0px;
     background-color: @bg-alt;
@@ -40,7 +40,6 @@ horibox {
     children:                    ["entry", "listview" ];
 }
 
-/*****----- Listview -----*****/
 listview {
     enabled:                     true;
     columns:                     1;
@@ -52,7 +51,7 @@ listview {
     reverse:                     false;
     fixed-height:                true;
     fixed-columns:               true;
-    
+
     spacing:                     10px;
     margin:                      0px;
     padding:                     0px;
@@ -99,4 +98,3 @@ element-icon {
   padding: 0 10 0 0;
   background-color: transparent;
 }
-
