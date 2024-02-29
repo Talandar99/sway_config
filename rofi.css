@@ -28,7 +28,6 @@ window {
   width: 100%;
   background-color: @bg;
   location:north;
-  anchor:  north;
   children:                    [ horibox ];
 }
 /*****----- Horizontal Box -----*****/
