@@ -180,7 +180,7 @@ smart_gaps on
 gaps outer 15px
 gaps inner 15px
 
-bar {
+bar     {
     position top
     # When the status_command prints a new line to stdout, swaybar updates.
     # The default just shows the current date and time.

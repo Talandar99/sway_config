@@ -22,35 +22,35 @@ Read ~man 5 sway~ for a complete reference.
 :END:
 ** Variables
 *** Font
-#+begin_src conf
+#+begin_src bash
 font pango:FiraCode Nerd Font Mono 12
 #+end_src
 *** Set Super Key as modifier
-#+begin_src conf
+#+begin_src bash
 set $mod Mod4
 #+end_src
 *** Set Home row direction keys, like vim
-#+begin_src conf
+#+begin_src bash
 set $left h
 set $down j
 set $up k
 set $right l
 #+end_src
 *** keyboard input
-#+begin_src conf
+#+begin_src bash
 input "keyboard" {
     xkb_options compose:menu
 }
 #+end_src
 ** Wallpaper
-#+begin_src conf
+#+begin_src bash
 output "*" bg ~/.config/sway/wallpaper.jpg fill
 #+end_src
 
 ** Idle configuration
 Example configuration:
 
-#+begin_src conf
+#+begin_src bash
 #exec swayidle -w \
 #timeout 300 'swaylock -f -c 000000' \
 #timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
@@ -64,7 +64,7 @@ resumed. It will also lock your screen before your computer goes to sleep.
 ** Input configuration
 Example configuration:
 
-#+begin_src conf
+#+begin_src bash
 #input "2:14:SynPS/2_Synaptics_TouchPad" {
 #dwt enabled
 #tap enabled
@@ -78,7 +78,7 @@ Read ~man 5 sway-input~ for more information about this section.
 
 ** Key bindings
 *** Start application
-#+begin_src conf
+#+begin_src bash
 bindsym $mod+p exec rofi -config ~/.config/sway/rofi.css -show combi
 # terminal
 bindsym $mod+Return exec alacritty
@@ -89,7 +89,7 @@ bindsym $mod+Shift+s exec grim -g "$(slurp)" - | wl-copy
 
 #+end_src
 *** Basics:
-#+begin_src conf
+#+begin_src bash
 # Kill focused window
 bindsym $mod+q kill
 #+end_src
@@ -97,7 +97,7 @@ Drag floating windows by holding down $mod and left mouse button.
 Resize them with right mouse button + $mod.
 Despite the name, also works for non-floating windows.
 Change normal to inverse to use left mouse button for resizing and right
-#+begin_src conf
+#+begin_src bash
 # mouse button for dragging.
 floating_modifier $mod normal
 
@@ -110,7 +110,7 @@ bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. 
 *** Moving around:
 Start a terminal
 Move your focus around
-#+begin_src conf
+#+begin_src bash
 bindsym $mod+$left focus left
 bindsym $mod+$down focus down
 bindsym $mod+$up focus up
@@ -134,7 +134,7 @@ bindsym $mod+Shift+Right move right
 #+end_src
 *** Workspaces:
 **** Rename workspaces
-#+begin_src conf
+#+begin_src bash
 set $ws1 '1: Terminal  '
 set $ws2 '2: Firefox  '
 set $ws3 '3: Spotify  '
@@ -159,7 +159,7 @@ for_window [class="Signal"] move to workspace $ws10
 for_window [class="discord"] move to workspace $ws10
 #+end_src
 **** Switch to workspace
-#+begin_src conf
+#+begin_src bash
 bindsym $mod+1 workspace number $ws1
 bindsym $mod+2 workspace number $ws2
 bindsym $mod+3 workspace number $ws3
@@ -172,7 +172,7 @@ bindsym $mod+9 workspace number $ws9
 bindsym $mod+0 workspace number $ws10
 #+end_src
 **** Move focused container to workspace
-#+begin_src conf
+#+begin_src bash
 bindsym $mod+Shift+1 move container to workspace number $ws1
 bindsym $mod+Shift+2 move container to workspace number $ws2
 bindsym $mod+Shift+3 move container to workspace number $ws3
@@ -189,7 +189,7 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 You can "split" the current object of your focus with
 $mod+b or $mod+v, for horizontal and vertical splits
 respectively.
-#+begin_src conf
+#+begin_src bash
 bindsym $mod+s splitv; exec notify-send "sway" "Changed split mode: Horizontal"
 bindsym $mod+v splith; exec notify-send "sway" "Changed split mode: Vertical"
 
@@ -214,7 +214,7 @@ bindsym $mod+a focus parent
 *** Scratchpad:
 Sway has a "scratchpad", which is a bag of holding for windows.
 You can send windows there and get them back later.
-#+begin_src conf
+#+begin_src bash
 #TODO figure out how to use it
 # Move the currently focused window to the scratchpad
 #bindsym $mod+Shift+minus move scratchpad
@@ -227,7 +227,7 @@ left will shrink the containers width
 right will grow the containers width
 up will shrink the containers height
 down will grow the containers height
-#+begin_src conf
+#+begin_src bash
 #
 mode "resize" {
     bindsym $left resize shrink width 10px
@@ -248,7 +248,7 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 #+end_src
 *** Volume
-#+begin_src conf
+#+begin_src bash
 set $refresh_i3status killall -SIGUSR1 i3status
 
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
@@ -263,11 +263,11 @@ bindsym $mod+comma exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
 #+RESULTS:
 
 *** Use Mouse+$mod to drag floating windows to their wanted position
-#+begin_src conf
+#+begin_src bash
 floating_modifier $mod
 #+end_src
 ** Colors
-#+begin_src conf
+#+begin_src bash
 client.focused           	#82AAFF #1E2030 #FFC777 #7aa2f7  #7aa2f7
 client.focused_inactive  	#82AAFF #1E2030 #82AAFF #565f89  #565f89
 client.unfocused         	#565f89 #1E2030 #82AAFF #565f89  #565f89
@@ -275,7 +275,7 @@ client.urgent            	#2f343a #FFC777 #1E2030 #FFC777  #FFC777
 client.placeholder       	#000000 #0c0c0c #1E2030 #565f89  #565f89
 #+end_src
 ** Window options
-#+begin_src conf
+#+begin_src bash
 for_window [class="^.*"] border pixel 3
 hide_edge_borders smart
 smart_gaps on
@@ -285,8 +285,8 @@ gaps inner 15px
 
 ** Status Bar:
 Read ~man 5 sway-bar~ for more information about this section.
-#+begin_src conf
-bar {
+#+begin_src bash
+bar     {
     position top
     # When the status_command prints a new line to stdout, swaybar updates.
     # The default just shows the current date and time.
